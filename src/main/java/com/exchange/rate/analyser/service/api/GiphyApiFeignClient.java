@@ -1,4 +1,4 @@
-package com.exchange.rate.analyser.sevice.api;
+package com.exchange.rate.analyser.service.api;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;

@@ -1,6 +1,6 @@
 package com.exchange.rate.analyser.controller;
 
-import com.exchange.rate.analyser.sevice.ExchangeService;
+import com.exchange.rate.analyser.service.ExchangeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +20,6 @@ public class ExchangeController {
 
     @GetMapping("/rate")
     public String analyzeExchangeRate(@RequestParam(name = "currency") String currency) {
-        return exchangeService.returnGifRespond(currency);
+        return exchangeService.processRateRequest(currency);
     }
 }

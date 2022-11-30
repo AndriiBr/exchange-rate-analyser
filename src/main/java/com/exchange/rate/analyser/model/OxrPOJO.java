@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.ToString;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @AllArgsConstructor
@@ -15,7 +16,7 @@ public class OxrPOJO {
     @JsonProperty("base")
     private String base;
     @JsonProperty("rates")
-    private Map<String, Double> rates;
+    private Map<String, Double> rates = new HashMap<>();
 
     public String getBase() {
         return base;
