@@ -1,78 +1,22 @@
 package com.exchange.rate.analyser.service;
 
-import com.exchange.rate.analyser.exception.JsonObjectMappingException;
-import com.exchange.rate.analyser.exception.NoSuchCurrencyRateException;
-import com.exchange.rate.analyser.model.OxrPOJO;
-import com.exchange.rate.analyser.service.api.GiphyApiFeignClient;
-import com.exchange.rate.analyser.service.api.OxrApiFeignClient;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.exchange.rate.analyser.api.ExchangeAnalyser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDate;
-import java.util.Map;
 
 @Service
 public class ExchangeService {
 
-    private final String oxrAppId = System.getProperty("oxr_app_id");
-    private final String giphyAppId = System.getProperty("giphy_app_id");
-
-    private final OxrApiFeignClient oxrApi;
-    private final GiphyApiFeignClient giphyApi;
+    private final ExchangeAnalyser exchangeAnalyser;
 
     @Autowired
-    public ExchangeService(OxrApiFeignClient oxrApi, GiphyApiFeignClient giphyApi) {
-        this.oxrApi = oxrApi;
-        this.giphyApi = giphyApi;
+    public ExchangeService(ExchangeAnalyser exchangeAnalyser) {
+        this.exchangeAnalyser = exchangeAnalyser;
     }
 
-    public String processRateRequest(String currency) {
-        InputValidator.checkInputCurrencyCode(currency);
+    public String compareExchangeRate(String currency) {
+        InputValidator.validateInputCurrencyCode(currency);
 
-        return getGifResponse(currency);
-    }
-
-    private String getGifResponse(String currency) {
-        String tag = analyzeExchangeRateDifference(currency);
-
-        return giphyApi.getGiphyRandom(giphyAppId, tag);
-    }
-
-    public String analyzeExchangeRateDifference(String currency) {
-        LocalDate today = LocalDate.now();
-        LocalDate yesterday = today.minusDays(1);
-
-        double todayRateValue = extractRateValue(today, currency);
-        double yesterdayRateValue = extractRateValue(yesterday, currency);
-
-        return defineRequestTag(todayRateValue, yesterdayRateValue);
-    }
-
-    private String defineRequestTag(double todayRateValue, double yesterdayRateValue) {
-        return todayRateValue > yesterdayRateValue ? "rich" : "broke";
-    }
-
-    private double extractRateValue(LocalDate targetDate, String currency) {
-        OxrPOJO oxr = convertRespondObject(targetDate);
-
-        return oxr.getRates().entrySet().stream()
-                .filter(entry -> entry.getKey().equalsIgnoreCase(currency))
-                .findFirst()
-                .map(Map.Entry::getValue)
-                .orElseThrow(() -> new NoSuchCurrencyRateException(String.format("%s currency is not detected!", currency)));
-    }
-
-    private OxrPOJO convertRespondObject(LocalDate targetDate) {
-        ObjectMapper objectMapper = new JsonMapper();
-        String jsonRespond = oxrApi.getExchangeRate(String.valueOf(targetDate), oxrAppId);
-
-        try {
-            return objectMapper.readValue(jsonRespond, OxrPOJO.class);
-        } catch (JsonProcessingException e) {
-            throw new JsonObjectMappingException("Cannot convert JSON to provided Object instance");
-        }
+        return exchangeAnalyser.analyseRateChanges(currency);
     }
 }

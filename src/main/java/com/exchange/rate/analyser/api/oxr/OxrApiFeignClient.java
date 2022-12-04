@@ -1,4 +1,4 @@
-package com.exchange.rate.analyser.service.api;
+package com.exchange.rate.analyser.api.oxr;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;

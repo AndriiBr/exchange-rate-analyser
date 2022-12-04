@@ -1,9 +1,8 @@
-package com.exchange.rate.analyser.service.api;
+package com.exchange.rate.analyser.api.giphy;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 @FeignClient(name = "giphy", url = "${giphy.api.url}")
 public interface GiphyApiFeignClient {

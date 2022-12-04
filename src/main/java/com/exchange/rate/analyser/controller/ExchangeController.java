@@ -20,6 +20,6 @@ public class ExchangeController {
 
     @GetMapping("/rate")
     public String analyzeExchangeRate(@RequestParam(name = "currency") String currency) {
-        return exchangeService.processRateRequest(currency);
+        return exchangeService.compareExchangeRate(currency);
     }
 }

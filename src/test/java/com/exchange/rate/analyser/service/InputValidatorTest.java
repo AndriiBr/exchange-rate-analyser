@@ -18,14 +18,14 @@ class InputValidatorTest {
     @MethodSource("provideWrongCurrencyCodes")
     void checkInputCurrencyCodeThrowsExceptionForWrongCode(String currencyCode) {
         assertThrows(InputValidationException.class,
-                () -> InputValidator.checkInputCurrencyCode(currencyCode));
+                () -> InputValidator.validateInputCurrencyCode(currencyCode));
     }
 
     @ParameterizedTest
     @DisplayName("do not throw exception for correct currency code")
     @MethodSource("provideCorrectCurrencyCodes")
     void heckInputCurrencyCodeThrowsExceptionForCorrectCode(String currencyCode) {
-        assertDoesNotThrow(() -> InputValidator.checkInputCurrencyCode(currencyCode));
+        assertDoesNotThrow(() -> InputValidator.validateInputCurrencyCode(currencyCode));
     }
 
     static Stream<Arguments> provideWrongCurrencyCodes() {
