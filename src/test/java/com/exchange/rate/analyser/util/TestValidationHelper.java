@@ -24,7 +24,7 @@ public class TestValidationHelper {
      * @param targetClass target class type
      * @return TRUE - if field with provided type exist. FALSE - if not.
      */
-    public static <T> boolean verifyFieldType(Object object, Class<T> targetClass) {
+    public static <T> boolean verifyFieldType(Object object, Class<? extends T> targetClass) {
         return Arrays.stream(object.getClass().getDeclaredFields())
                 .anyMatch(field -> field.getType().equals(targetClass));
     }
