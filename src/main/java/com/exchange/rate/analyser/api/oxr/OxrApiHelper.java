@@ -44,9 +44,9 @@ public class OxrApiHelper {
     }
 
     /**
-     * Get POJO object from extracted Json for provided date
+     * Get DTO object from extracted Json on provided date
      * @param targetDate search date
-     * @return POJO object
+     * @return DTO object
      */
     private OxrDTO convertJsonToObjectByDate(LocalDate targetDate) {
         ObjectMapper objectMapper = new JsonMapper();
